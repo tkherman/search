@@ -4,7 +4,7 @@ Project 01 - README
 Members
 -------
 
-- Domer McDomerson (dmcdomer@nd.edu)
+- John McGuinness (jmcguin1@nd.edu)
 
 Responses
 ---------
