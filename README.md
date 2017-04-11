@@ -15,3 +15,4 @@ Contributions
 -------------
 Herman: Completed Makefile and utilities.c.
         Added test_utils.c which was used to test utilities.c
+        Completed search.c, it should work but haven't tested
