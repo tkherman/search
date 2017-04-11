@@ -29,6 +29,9 @@ int	    search(const char *root, const Settings *settings) {
             if (!filter(newpath, settings))
                 execute(newpath, settings);
             
+            // for testing purposes
+            //printf("%s\n", dp->d_name);
+            
             // check if it is a directory, if so, recurse
             if (dp->d_type == DT_DIR)
                 search(newpath, settings);
