@@ -16,7 +16,31 @@
  * @return  Whether or not a directory is empty.
  */
 bool        is_directory_empty(const char *path) {
-    return false;
+    struct dirent *dp;
+    DIR *dir = opendir(path);
+    bool is_empty = true;
+
+    if (dir) {
+        while ((dp = readdir(dir)) != NULL) {
+            // anything that's not an entry . or .. will satisfy the condition
+            // setting is_empty to false and exit while loop
+            
+            if (dp->d_type != DT_DIR) {
+                is_empty = false;
+                break;
+            } else if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")) {
+                is_empty = false;
+                break;
+            }
+        }
+    } else {
+        // prints string error if system call fails
+        fprintf(stderr, "Error: %s\n", strerror(errno));
+    }
+
+    closedir(dir);
+
+    return is_empty;
 }
 
 /**
@@ -25,7 +49,10 @@ bool        is_directory_empty(const char *path) {
  * @return  The modification time of the given file.
  */
 time_t      get_mtime(const char *path) {
-    return 0;
+    struct stat s;
+    lstat(path, &s);
+    
+    return s.st_mtime;
 }
 
 /* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */
