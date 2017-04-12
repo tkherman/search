@@ -71,7 +71,6 @@ bool        filter(const char *path, const Settings *settings) {
     // check permission assuming settings->perm was set in octal
     if (settings->perm) {
         int file_perm = s.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
-        printf ("%d\n", file_perm);
         if (settings->perm != file_perm)
             return true;
     }
