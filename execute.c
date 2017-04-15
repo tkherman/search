@@ -31,7 +31,7 @@ int	    execute(const char *path, const Settings *settings) {
             exit(EXIT_FAILURE);
         } else if(id > 0) { //this is the parent process
             int status;
-            waitpid(&status);
+            wait(&status);
 
         } else { //this is the child process
             if(execvp(path, settings->exec_argv) < 0) { //command executed
