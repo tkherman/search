@@ -22,8 +22,9 @@ bool        is_directory_empty(const char *path) {
 
     if (dir) {
         while ((dp = readdir(dir)) != NULL) {
-            // anything that's not an entry . or .. will satisfy the condition
-            // setting is_empty to false and exit while loop
+            // anything that's not an entry
+            // (. or .. will satisfy the condition)
+            // and set is_empty to false and exit while loop
             
             if (dp->d_type != DT_DIR) {
                 is_empty = false;

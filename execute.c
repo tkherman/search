@@ -18,7 +18,32 @@
  * @return  Whether or not the execution was successful.
  */
 int	    execute(const char *path, const Settings *settings) {
-    return 0;
+    
+    if(settings->print)
+        puts(path);
+
+    if(settings->access = X_OK) {
+
+        pid_t id = fork();
+        if(id == -1) {
+            //fork failed
+            fprintf(stderr, "Error: %s\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        } else if(id > 0) { //this is the parent process
+            int status;
+            waitpid(&status);
+
+        } else { //this is the child process
+            if(execvp(path, settings->exec_argv) < 0) { //command executed
+                //if here, execution failed
+                fprintf(stderr, "Error: %s\n", strerror(errno));
+                exit(EXIT_FAILURE);
+           } 
+        }
+
+    }
+
+    return EXIT_SUCCESS;
 }
 
 /* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */
