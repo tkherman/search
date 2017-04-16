@@ -22,7 +22,7 @@ int	    execute(const char *path, const Settings *settings) {
     if(settings->print)
         puts(path);
 
-    if(settings->access == X_OK) {
+    if(settings->exec_argc) {
 
         pid_t id = fork();
         if(id == -1) {
@@ -31,17 +31,20 @@ int	    execute(const char *path, const Settings *settings) {
             return EXIT_FAILURE;
         } else if(id > 0) { //this is the parent process
             int status;
-            while(wait(&status) != id);
+            wait(&status);
 
         } else { //this is the child process
-            if(execvp(path, settings->exec_argv) < 0) { //command executed
+            char **exec_arg = settings->exec_argv;
+            char *file = exec_arg[0];
+            exec_arg++;
+            if(execvp(file, exec_arg) < 0) { //command executed
                 //if here, execution failed
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 return EXIT_FAILURE;
            } 
         }
 
-    } else puts(path);
+    };
 
     return EXIT_SUCCESS;
 }

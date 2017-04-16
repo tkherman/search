@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -41,14 +42,19 @@ int	    main(int argc, char *argv[]) {
         .access = 0,
         .uid    = 0,
         .gid    = 0,
+        .print  = true,
     };
 
     /* Parse command line arguments */
-    char* path;
+    char *path;
     char * prog_name = argv[0];
-    printf("%s %d\n", argv[1], argc);
-    if(argc < 2) usage(prog_name,1);
-    else path = argv[1];
+    
+    if (argc < 2) 
+        usage(prog_name,1);
+    else
+        path = argv[1];
+    
+    // starting argument at index 2 since 1 is the root
     int argind = 2;
 
     while (argind < argc) {
@@ -61,18 +67,20 @@ int	    main(int argc, char *argv[]) {
             settings.access |= W_OK;
         } else if (streq(arg, "-type")) {
             if(argind < argc) {
-                char opt = argv[argind++][1];
+                char opt = argv[argind++][0];
                 if(opt == 'f') settings.type = 'f';
                 else if(opt == 'd') settings.type = 'd';
             } else {
                 fprintf(stderr, "Error: -type requires another argument ('f' or 'd')\n");
                 usage(prog_name,1);
             }
+        } else if (streq(arg, "-empty")) {
+            settings.empty = true;
         } else if (streq(arg, "-name")) {
             if(argind < argc) {
                 settings.name = argv[argind++];
             } else {
-                fprintf(stderr, "Error: -path requires another argument\n");
+                fprintf(stderr, "Error: -name requires another argument\n");
                 usage(prog_name,1);
             }
         } else if (streq(arg, "-path")) {
@@ -84,52 +92,57 @@ int	    main(int argc, char *argv[]) {
             }
        } else if(streq(arg, "-perm")) { 
             if(argind < argc) {
-                settings.perm = atoi(argv[argind++]);
+                char *ptr;
+                unsigned long int decimal = strtoul(argv[argind++], &ptr, 8);
+                settings.perm = decimal & INT_MAX;
             } else {
                 fprintf(stderr, "Error: -perm requires another argument\n");
                 usage(prog_name,1);
             }
        } else if(streq(arg, "-newer")) { 
             if(argind < argc) {
-                time_t newer = atoi(argv[argind++]);
-                settings.newer = newer;
+                settings.newer = get_mtime(argv[argind++]);
             } else {
                 fprintf(stderr, "Error: -newer requires another argument\n");
                 usage(prog_name,1);
             }
         } else if (streq(arg, "-uid")) {
             if(argind < argc) {
-                int uid = atoi(argv[argind++]);
-                settings.uid = uid;
+                settings.uid = atoi(argv[argind++]);
             } else {
                 fprintf(stderr, "Error: -uid requires another argument\n");
                 usage(prog_name,1);
             }
         } else if (streq(arg, "-gid")) {
             if(argind < argc) {
-                int gid = atoi(argv[argind++]);
-                settings.gid = gid;
+                settings.gid = atoi(argv[argind++]);
             } else {
                 fprintf(stderr, "Error: -gid requires another argument\n");
                 usage(prog_name,1);
             }
-
-        //still need to add -print, etc
-        //*****
-        //*****
+        } else if (streq(arg, "-print")) {
+            settings.print = true;
+        } else if (streq(arg, "-exec")) {
+            char **exec_arg = malloc(2*sizeof(char*));
+            int temp_ind = 0;
+            while (strcmp(argv[argind], "{}")) {
+                exec_arg = realloc(exec_arg, sizeof(exec_arg) + sizeof(char*));
+                exec_arg[temp_ind++] = argv[argind++];
+            }
+            settings.exec_argc = temp_ind;
+            argind++;
+            settings.exec_argv = exec_arg;
 
         } else {
             fprintf(stderr, "Error: -invalid argument %s\n", arg);
             usage(prog_name,1);
         }
     }
-    
 
-    /*if(!filter(path, &settings)) {
-        search(path, &settings);
-        puts("hi main");
-    } else puts("bye");*/
+
     search(path, &settings);
+    
+    free(settings.exec_argv);
 
     return EXIT_SUCCESS;
 }
