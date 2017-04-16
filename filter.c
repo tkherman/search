@@ -74,7 +74,7 @@ bool        filter(const char *path, const Settings *settings) {
     }
 
     // check if it's newer than file
-    if (settings->newer && settings->newer < get_mtime(path))
+    if (settings->newer && settings->newer >= get_mtime(path))
         return true;
 
     // check if uid matches

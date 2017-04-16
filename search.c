@@ -18,32 +18,34 @@
 int	    search(const char *root, const Settings *settings) {
     struct dirent *dp;
     DIR *dir = opendir(root);
-
+    
     if (dir) {
         while ((dp = readdir(dir)) != NULL) {
             
             //check if . or ..
-            if(streq(dp->d_name,"."))
+            if(streq(dp->d_name,".")) {
+                // run filter and execute on root
+                if (!filter(root, settings))
+                    execute(root, settings);
+            } else if(streq(dp->d_name,".."))
                 continue;
-            if(streq(dp->d_name,".."))
-                continue;
+            else {
+                // generate new path
+                char newpath[strlen(root) + strlen(dp->d_name) + 2];
+                sprintf(newpath, "%s/%s", root, dp->d_name);
+                
+                // check if it is a directory, if so, recurse
+                if (dp->d_type == DT_DIR)
+                    search(newpath, settings);
 
-            // generate new path
-            char newpath[strlen(root) + strlen(dp->d_name) + 2];
-            sprintf(newpath, "%s/%s", root, dp->d_name);
-            
-            // pass this directory/file into filter to determine if
-            // it has to be executed
-            if (!filter(newpath, settings))
-                execute(newpath, settings);
-           
+                // pass this directory/file into filter to determine if
+                // it has to be executed
+                else 
+                    if (!filter(newpath, settings))
+                        execute(newpath, settings);
 
-            //must close directory before recursing
-            //closedir(dir);
+            }
 
-            // check if it is a directory, if so, recurse
-            if (dp->d_type == DT_DIR)
-                search(newpath, settings);
         }
     } else {
         fprintf(stderr, "Error: %s\n", strerror(errno));
