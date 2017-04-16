@@ -29,11 +29,12 @@ bool        filter(const char *path, const Settings *settings) {
     
     
     // check -executable -readable -writable
-    if (settings->access && access(path, settings->access) != 0)
+    if (settings->access && access(path, settings->access) != 0) {
         return true;
+    }
 
 
-    // check type f for file d for directory
+    // check type f for file, d for directory
     if (settings->type) {
         if (settings->type == 'f' && !S_ISREG(s.st_mode))
             return true;
@@ -41,11 +42,9 @@ bool        filter(const char *path, const Settings *settings) {
             return true;
     }
 
-
     // check if it's empty, return true if not
     if (settings->empty && s.st_size != 0)
         return true;
-
 
     // check if base of file name matches shell pattern
     if (settings->name) {
@@ -67,7 +66,6 @@ bool        filter(const char *path, const Settings *settings) {
         free(pathname);
     }
 
-
     // check permission assuming settings->perm was set in octal
     if (settings->perm) {
         int file_perm = s.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
@@ -79,16 +77,15 @@ bool        filter(const char *path, const Settings *settings) {
     if (settings->newer && settings->newer < get_mtime(path))
         return true;
 
-
     // check if uid matches
     if (settings->uid && s.st_uid != settings->uid) {
+        puts("here");
         return true;
     }
 
     // check if gid matches
     if (settings->gid && s.st_gid != settings->gid)
         return true;
-
 
     return false;
 }
