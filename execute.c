@@ -47,17 +47,10 @@ int	    execute(const char *path, const Settings *settings) {
             //if it gets here, execution failed
             fprintf(stderr, "Error: %s\n", strerror(errno));
             return EXIT_FAILURE;
-           } 
-        }
-
-<<<<<<< HEAD
+        } 
     }
-=======
-    };
-    
-    puts(path);
 
->>>>>>> 7933dcdf069cd6f93bb3d4f19c01b123b006adfd
+    puts(path);
 
     return EXIT_SUCCESS;
 };
