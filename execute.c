@@ -35,9 +35,8 @@ int	    execute(const char *path, const Settings *settings) {
 
         } else { //this is the child process
             char **exec_arg = settings->exec_argv;
-            char *file = exec_arg[0];
             exec_arg++;
-            if(execvp(file, exec_arg) < 0) { //command executed
+            if(execvp(exec_arg[0], exec_arg) < 0) { //command executed
                 //if here, execution failed
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 return EXIT_FAILURE;

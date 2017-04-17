@@ -126,13 +126,23 @@ int	    main(int argc, char *argv[]) {
         } else if (streq(arg, "-exec")) {
             char **exec_arg = malloc(2*sizeof(char*));
             int temp_ind = 0;
-            while (strcmp(argv[argind], "{}")) {
+
+            if(argind >= argc) usage(prog_name, 1); //prevent segfault
+
+            while (argind < argc && !streq(argv[argind], "{}")) {
+
                 exec_arg = realloc(exec_arg, sizeof(exec_arg) + sizeof(char*));
                 exec_arg[temp_ind++] = argv[argind++];
             }
+            //if not enough arguments (should be 2 more), error
+            if(argind >= argc) usage(prog_name,1);
+
             settings.exec_argc = temp_ind;
-            argind++;
             settings.exec_argv = exec_arg;
+
+            //update arginds
+            argind++;
+            if(!streq(argv[argind++],";")) usage(prog_name,1);
 
         } else {
             fprintf(stderr, "Error: -invalid argument %s\n", arg);
