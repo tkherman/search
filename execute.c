@@ -43,7 +43,7 @@ int	    execute(const char *path, const Settings *settings) {
            } 
         }
 
-    };
+    }
 
     return EXIT_SUCCESS;
 }
