@@ -18,9 +18,6 @@
  * @return  Whether or not the execution was successful.
  */
 int	    execute(const char *path, const Settings *settings) {
-    
-    if(settings->print)
-        puts(path);
 
     if(settings->exec_argc) {
 
@@ -33,19 +30,32 @@ int	    execute(const char *path, const Settings *settings) {
             int status;
             wait(&status);
 
+            if (settings->print)
+                puts(path);
+
+            return EXIT_SUCCESS;
+
         } else { //this is the child process
             char **exec_arg = settings->exec_argv;
-            exec_arg++;
-            if(execvp(exec_arg[0], exec_arg) < 0) { //command executed
-                //if here, execution failed
-                fprintf(stderr, "Error: %s\n", strerror(errno));
-                return EXIT_FAILURE;
+            // attach path to the end of exec_arg
+            char *path_nc = strdup(path);
+            exec_arg[settings->exec_argc - 2] = path_nc;
+            exec_arg[settings->exec_argc - 1] = NULL;
+            
+            execvp(exec_arg[0], exec_arg);  //command executed
+            
+            //if it gets here, execution failed
+            fprintf(stderr, "Error: %s\n", strerror(errno));
+            return EXIT_FAILURE;
            } 
         }
 
     };
+    
+    puts(path);
+
 
     return EXIT_SUCCESS;
-}
+};
 
 /* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */

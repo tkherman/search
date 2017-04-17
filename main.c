@@ -42,7 +42,6 @@ int	    main(int argc, char *argv[]) {
         .access = 0,
         .uid    = -1, 
         .gid    = -1,
-        .print  = true,
     };
 
     /* Parse command line arguments */
