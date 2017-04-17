@@ -40,8 +40,8 @@ int	    main(int argc, char *argv[]) {
     /* Initialize Settings struct */
     Settings settings = {
         .access = 0,
-        .uid    = 0,
-        .gid    = 0,
+        .uid    = 0, //something off here
+        .gid    = 0, //something off here
         .print  = true,
     };
 
@@ -49,8 +49,9 @@ int	    main(int argc, char *argv[]) {
     char *path;
     char * prog_name = argv[0];
     
+    
     if (argc < 2) 
-        usage(prog_name,1);
+        usage(prog_name, 1);
     else
         path = argv[1];
     

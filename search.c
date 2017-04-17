@@ -18,6 +18,9 @@
 int	    search(const char *root, const Settings *settings) {
     struct dirent *dp;
     DIR *dir = opendir(root);
+
+    //THIS IS THE ERROR WITH NO ARGUMENTS
+    //sometimes directories that find can't open search can open
     
     if (dir) {
         while ((dp = readdir(dir)) != NULL) {

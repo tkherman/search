@@ -24,6 +24,7 @@
  */
 bool        filter(const char *path, const Settings *settings) {
     // get struct stat of the file
+    
     struct stat s;
     lstat(path, &s);
     
