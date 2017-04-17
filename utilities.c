@@ -26,10 +26,7 @@ bool        is_directory_empty(const char *path) {
             // (. or .. will satisfy the condition)
             // and set is_empty to false and exit while loop
             
-            if (dp->d_type != DT_DIR) {
-                is_empty = false;
-                break;
-            } else if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")) {
+            if (!streq(dp->d_name, ".") && !streq(dp->d_name, "..")) {
                 is_empty = false;
                 break;
             }
