@@ -51,7 +51,9 @@ int	    search(const char *root, const Settings *settings) {
 
         }
     } else {
-        fprintf(stderr, "Error: %s\n", strerror(errno));
+        if(!filter(root, settings))
+            execute(root, settings);
+        //fprintf(stderr, "Error: %s\n", strerror(errno));
         closedir(dir);
         return EXIT_FAILURE;
     }
