@@ -60,12 +60,16 @@ int	    main(int argc, char *argv[]) {
 
     while (argind < argc) {
         char *arg = argv[argind++];
+
         if (streq(arg, "-executable")) {
             settings.access |= X_OK;
+
         } else if (streq(arg, "-readable")) {
             settings.access |= R_OK;
+
         } else if (streq(arg, "-writable")) {
             settings.access |= W_OK;
+
         } else if (streq(arg, "-type")) {
             if(argind < argc) {
                 char opt = argv[argind++][0];
@@ -75,8 +79,10 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -type requires another argument ('f' or 'd')\n");
                 usage(prog_name,1);
             }
+
         } else if (streq(arg, "-empty")) {
             settings.empty = true;
+
         } else if (streq(arg, "-name")) {
             if(argind < argc) {
                 settings.name = argv[argind++];
@@ -84,6 +90,7 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -name requires another argument\n");
                 usage(prog_name,1);
             }
+
         } else if (streq(arg, "-path")) {
             if(argind < argc) {
                 settings.path = argv[argind++];
@@ -91,6 +98,7 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -path requires another argument\n");
                 usage(prog_name,1);
             }
+
        } else if(streq(arg, "-perm")) { 
             if(argind < argc) {
                 char *ptr;
@@ -100,6 +108,7 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -perm requires another argument\n");
                 usage(prog_name,1);
             }
+
        } else if(streq(arg, "-newer")) { 
             if(argind < argc) {
                 settings.newer = get_mtime(argv[argind++]);
@@ -107,6 +116,7 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -newer requires another argument\n");
                 usage(prog_name,1);
             }
+
         } else if (streq(arg, "-uid")) {
             if(argind < argc) {
                 settings.uid = atoi(argv[argind++]);
@@ -114,6 +124,7 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -uid requires another argument\n");
                 usage(prog_name,1);
             }
+
         } else if (streq(arg, "-gid")) {
             if(argind < argc) {
                 settings.gid = atoi(argv[argind++]);
@@ -121,8 +132,10 @@ int	    main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: -gid requires another argument\n");
                 usage(prog_name,1);
             }
+
         } else if (streq(arg, "-print")) {
             settings.print = true;
+
         } else if (streq(arg, "-exec")) {
             char **exec_arg = malloc(2*sizeof(char*));
             int temp_ind = 0;
