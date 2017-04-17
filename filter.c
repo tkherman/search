@@ -79,13 +79,12 @@ bool        filter(const char *path, const Settings *settings) {
         return true;
 
     // check if uid matches
-    if (settings->uid && s.st_uid != settings->uid) {
-        puts("here");
+    if (settings->uid != -1 && s.st_uid != settings->uid) {
         return true;
     }
 
     // check if gid matches
-    if (settings->gid && s.st_gid != settings->gid)
+    if (settings->gid != -1 && s.st_gid != settings->gid)
         return true;
 
     return false;

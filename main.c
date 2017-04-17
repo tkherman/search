@@ -40,8 +40,8 @@ int	    main(int argc, char *argv[]) {
     /* Initialize Settings struct */
     Settings settings = {
         .access = 0,
-        .uid    = 0, //something off here
-        .gid    = 0, //something off here
+        .uid    = -1, 
+        .gid    = -1,
         .print  = true,
     };
 
