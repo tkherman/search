@@ -49,10 +49,9 @@ int	    execute(const char *path, const Settings *settings) {
             // fork failed
             fprintf(stderr, "Error: %s\n", strerror(errno));
             return EXIT_FAILURE;
-        }
-
+        } 
     }
-    
+
     puts(path);
 
     return EXIT_SUCCESS;
