@@ -98,7 +98,7 @@ int	    main(int argc, char *argv[]) {
                 usage(prog_name,1);
             }
 
-       } else if(streq(arg, "-perm")) { 
+        } else if(streq(arg, "-perm")) { 
             if(argind < argc) {
                 char *ptr;
                 unsigned long int decimal = strtoul(argv[argind++], &ptr, 8);
@@ -108,7 +108,7 @@ int	    main(int argc, char *argv[]) {
                 usage(prog_name,1);
             }
 
-       } else if(streq(arg, "-newer")) { 
+        } else if(streq(arg, "-newer")) { 
             if(argind < argc) {
                 settings.newer = get_mtime(argv[argind++]);
             } else {
@@ -136,36 +136,28 @@ int	    main(int argc, char *argv[]) {
             settings.print = true;
 
         } else if (streq(arg, "-exec")) {
-            char **exec_arg = malloc(2*sizeof(char*));
-            int temp_ind = 0;
 
-            if(argind >= argc) usage(prog_name, 1); //prevent segfault
-
-            while (argind < argc && !streq(argv[argind], "{}")) {
-
-                exec_arg = realloc(exec_arg, sizeof(exec_arg) + sizeof(char*));
-                exec_arg[temp_ind++] = argv[argind++];
+            settings.exec_argv = &argv[argind++];
+            int temp_argc = 1;
+            if (argind >= argc) {
+                fprintf(stderr, "Error: invalid use of -exec\n");
+                usage(prog_name, 1);
             }
-            //if not enough arguments (should be 2 more), error
-            if(argind >= argc) usage(prog_name,1);
+            while (!streq(argv[argind++], ";")) {
+                temp_argc++;
+                if (argind >= argc) {
+                    fprintf(stderr, "Error: invalid use of -exec\n");
+                    usage(prog_name, 1);
+                }
+            }
+            settings.exec_argc = temp_argc;
+            
+        }           
+           
 
-            settings.exec_argc = temp_ind;
-            settings.exec_argv = exec_arg;
-
-            //update arginds
-            argind++;
-            if(!streq(argv[argind++],";")) usage(prog_name,1);
-
-        } else {
-            fprintf(stderr, "Error: -invalid argument %s\n", arg);
-            usage(prog_name,1);
-        }
     }
-
-
     search(path, &settings);
     
-    free(settings.exec_argv);
 
     return EXIT_SUCCESS;
 }

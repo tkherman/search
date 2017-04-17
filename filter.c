@@ -44,9 +44,21 @@ bool        filter(const char *path, const Settings *settings) {
     }
 
     // check if it's empty, return true if not
-    if (settings->empty && s.st_size != 0)
-        return true;
-
+    if (settings->empty) {
+        // if it's a directory, and not empty, return true
+        if (S_ISDIR(s.st_mode)) { 
+            if (!is_directory_empty(path)) 
+                return true;
+        } else if (S_ISREG(s.st_mode)) {
+            if (s.st_size != 0)
+                return true;
+        } else {
+            return true;
+        }
+        
+    }
+    
+    
     // check if base of file name matches shell pattern
     if (settings->name) {
         char *pathname = strdup(path); // since basename expects char*
@@ -60,7 +72,7 @@ bool        filter(const char *path, const Settings *settings) {
     // check if path of file matches shell pattern
     if (settings->path) {
         char *pathname = strdup(path);
-        if (fnmatch(settings->path, pathname, FNM_PATHNAME)) {
+        if (fnmatch(settings->path, pathname, 0)) {
             free(pathname);
             return true;
         }

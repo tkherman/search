@@ -4,7 +4,7 @@
 
 int main() {
     bool empty;
-    empty = is_directory_empty("hello");
+    empty = is_directory_empty("/etc/yum/vars");
 
     time_t time = get_mtime("search.h");
 

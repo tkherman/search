@@ -20,13 +20,8 @@
 int	    execute(const char *path, const Settings *settings) {
 
     if(settings->exec_argc) {
-
         pid_t id = fork();
-        if(id == -1) {
-            //fork failed
-            fprintf(stderr, "Error: %s\n", strerror(errno));
-            return EXIT_FAILURE;
-        } else if(id > 0) { //this is the parent process
+        if(id > 0) { //this is the parent process
             int status;
             wait(&status);
 
@@ -35,27 +30,32 @@ int	    execute(const char *path, const Settings *settings) {
 
             return EXIT_SUCCESS;
 
-        } else { //this is the child process
-            char **exec_arg = settings->exec_argv;
-            // attach path to the end of exec_arg
-            char *path_nc = strdup(path);
-            exec_arg[settings->exec_argc - 2] = path_nc;
-            exec_arg[settings->exec_argc - 1] = NULL;
+        } else if (id == 0) { //this is the child process
+            char *exec_arg[settings->exec_argc + 1]; 
+            for (int i = 0; i < settings->exec_argc; i++) {
+                exec_arg[i] = settings->exec_argv[i];
+            }
+
+            char path_nc[strlen(path) + 1];
+            strcpy(path_nc, path);
             
-            execvp(exec_arg[0], exec_arg);  //command executed
+            exec_arg[settings->exec_argc - 1] = path_nc;
             
-            //if it gets here, execution failed
+            exec_arg[settings->exec_argc] = NULL; // one extra spot allocated, won't segfault
+
+            execvp(exec_arg[0], exec_arg);
+            
+        } else {
+            // fork failed
             fprintf(stderr, "Error: %s\n", strerror(errno));
             return EXIT_FAILURE;
-           } 
         }
 
-    };
+    }
     
     puts(path);
 
-
     return EXIT_SUCCESS;
-};
+}
 
 /* vim: set sts=4 sw=4 ts=8 expandtab ft=c: */

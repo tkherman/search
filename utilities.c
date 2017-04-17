@@ -37,6 +37,7 @@ bool        is_directory_empty(const char *path) {
     } else {
         // prints string error if system call fails
         fprintf(stderr, "Error: %s\n", strerror(errno));
+        is_empty = false;
     }
 
     closedir(dir);
