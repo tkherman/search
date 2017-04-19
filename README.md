@@ -20,12 +20,21 @@ Contributions
 -------------
 Herman: Completed Makefile and utilities.c.
         Added test_utils.c which was used to test utilities.c
-        Completed search.c, it should work but haven't tested
+		Wrote and debugged search.c.
         Added test_search.c and tested search.c
         Completed filter.c, everything tested except for permission
         Added test_filter.c
+        Helped writing and debugging execute.c and main.c
 
 Kendyll: 	Debugged main.c, execute.c, and filter.c
 			Completed README.md
 			Completed syscalls.py
+
+John:	Wrote and helped debug execute.c.
+		Wrote the majority of main.c and debugged many errors.
+		Fixed errors in filter.c.
+		Helped debug search.c.
+		
+
+		
 

@@ -43,7 +43,10 @@ int	    execute(const char *path, const Settings *settings) {
             
             exec_arg[settings->exec_argc] = NULL; // one extra spot allocated, won't segfault
 
-            execvp(exec_arg[0], exec_arg);
+            if (execvp(exec_arg[0], exec_arg) < 0) {
+                fprintf(stderr, "Unable to exec: %s\n", strerror(errno));
+            }
+            _exit(EXIT_FAILURE);
             
         } else {
             // fork failed
