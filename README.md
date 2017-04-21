@@ -24,6 +24,7 @@ Herman: Completed Makefile and utilities.c.
         Added test_search.c and tested search.c
         Completed filter.c, everything tested except for permission
         Added test_filter.c
+        Helped writing and debugging execute.c and main.c
 
 Kendyll: 	Debugged main.c, execute.c, and filter.c
 			Completed README.md
