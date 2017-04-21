@@ -32,3 +32,6 @@ print("\n#find /etc")
 findResult = putInDict(findLines)
 for key in sorted(findResult, key=findResult.get, reverse=True):
 	print ('\t{} {}'.format(findResult[key], key))
+
+os.system('rm findOutput.txt')
+os.system('rm searchOutput.txt')
