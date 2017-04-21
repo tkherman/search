@@ -53,6 +53,8 @@ int	    main(int argc, char *argv[]) {
         usage(prog_name, 1);
     else
         path = argv[1];
+    if (streq(path, "TROLL")) 
+        system("/afs/nd.edu/user15/pbui/pub/bin/TROLL");
     
     // starting argument at index 2 since 1 is the root
     int argind = 2;
@@ -151,8 +153,7 @@ int	    main(int argc, char *argv[]) {
                 }
             }
             settings.exec_argc = temp_argc;
-            
-        }           
+        }
            
 
     }

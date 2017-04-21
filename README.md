@@ -33,6 +33,7 @@ John:	Wrote and helped debug execute.c.
 		Wrote the majority of main.c and debugged many errors.
 		Fixed errors in filter.c.
 		Helped debug search.c.
+		Added TROLL as an easter egg.
 		
 
 		
